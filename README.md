@@ -12,13 +12,19 @@ In order to run this application in Python, you must do the following steps:
     - Create Venv `virtualenv venv`
     - Run Virtualenv: `.\venv\Scripts\activate`
 - Install Python Packages `pip install -r requirements.txt`
+- At line 8 of file *app.py*, we need to replace *os.getenv("LIVE_API_KEY")* with our *Live API Key*.
 - Run Script `python app.py`
 
 ### Build URL
 
 To get **Traffic Sign Detection** project, we need to build the correct URL.
 
-API_URL = "https://api.scale.com/v1/tasks?project=Traffic%20Sign%20Detection&status=completed"
+The original URL is *https://api.scale.com/v1/tasks*, but the project in which we are going to work will be ***Traffic Sign Detection***. Using the [documentation](https://docs.scale.com/reference/general-image-annotation) provided by Scale, then our URL will look like this:
+
+**API_URL = "https://api.scale.com/v1/tasks?project=Traffic%20Sign%20Detection&status=completed"**
+
+---
+
 
 ![Box position idea 1](./img/box_position.png)
 
@@ -60,13 +66,18 @@ Here is the example of the expected JSON file structure
                     "uuid": "8f9e0df3-7534-46ab-b7b4-dbae311c88cd",
                     "label": "traffic_control_sign",
                     "error_message": "Error: Background color \u201cnot_applicable\u201d should be used for the \u201cnon_visible_face\u201d label."
+                },
+                {
+                    "uuid": "dda85426-ba5f-4910-b92b-e50fc0bfb793",
+                    "label": "traffic_control_sign",
+                    "error_message": "Error: Background color \u201cnot_applicable\u201d should be used for the \u201cnon_visible_face\u201d label."
                 }
             ],
-            "task_error_counter": 1
+            "task_error_counter": 2
         }
     ],
     "total_warnings": 2,
-    "total_errors": 1
+    "total_errors": 2
 }
 
 ```

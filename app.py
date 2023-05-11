@@ -76,23 +76,74 @@ def check_label_bg_color(label_id,label_name, label_color):
         return True
     
     return False
+
+def save_box(box_id, box_label, box_x, box_y, box_w, box_h):
+    if(annotation_label != object_to_annotate_name_2):
+        
+        boxes_area.append(
+            {
+                "box_id": box_id,
+                "box_label": box_label,
+                "position_left":  box_x,
+                "position_top":  box_y,
+                "width": box_w,
+                "height": box_h
+            })
+    return True
+
+def calculate_overlap_area(box1, box2):
+    # Calculate the position of the upper left corner
+    x_overlap = max(0, min(box1['position_left'] + box1['width'], box2['position_left'] + box2['width']) - max(box1['position_left'], box2['position_left']))
+    y_overlap = max(0, min(box1['position_top'] + box1['height'], box2['position_top'] + box2['height']) - max(box1['position_top'], box2['position_top']))
+    
+    overlap_area = x_overlap * y_overlap
+    return overlap_area
+
+
+def check_overlap(boxes_area):
+    for i in range(len(boxes_area)):
+        for j in range(i+1, len(boxes_area)):
+            # Box 1 and Box 2 areas
+            area1 = boxes_area[i]['width'] * boxes_area[i]['height']
+            area2 = boxes_area[j]['width'] * boxes_area[j]['height']
+            
+            overlap_area = calculate_overlap_area(boxes_area[i], boxes_area[j])
+
+            overlap_percentage1 = overlap_area / area1
+            overlap_percentage2 = overlap_area / area2
+            
+            # Overlap 50% or 75%
+            max_percent = 0.5
+            if overlap_percentage1 > max_percent or overlap_percentage2 > max_percent:
+                warning_message = f"Warning, uuid: {boxes_area[i]['box_id']} , {boxes_area[i]['box_label']} AND uuid: {boxes_area[j]['box_id']} , {boxes_area[i]['box_label']} overlap by more than 75%"
+                add_warning(boxes_area[i]['box_id'], boxes_area[i]['box_label'], warning_message)
+                return True
+    
+    return False
     
 for task in JSON_load['docs']:
+    boxes_area = []
     task_error_flag, task_warning_flag = False, False
     task_annotations = task['response']['annotations']
-    print("======== TASK {}".format(task['task_id']))
+    # print("======== TASK {}".format(task['task_id']))
     for annotation in task_annotations:
         annotation_id = annotation['uuid']
         annotation_label = annotation['label']
         annotation_bg_color = annotation['attributes']['background_color']
         annotation_occlusion = annotation['attributes']['occlusion']
         annotation_truncation = annotation['attributes']['truncation']
+        annotation_position_x = annotation['left']
+        annotation_position_y = annotation['top']
+        annotation_height = annotation['height']
+        annotation_width = annotation['width']
         
         check_label_bg_color(annotation_id, annotation_label, annotation_bg_color)
         check_occlusion_truncation(annotation_id, annotation_label, annotation_occlusion, annotation_truncation)
         task_error_flag =  True if errors_list_task else False
         task_warning_flag =  True if warnings_list_task else False
-
+        save_box(annotation_id, annotation_label, annotation_position_x, annotation_position_y, annotation_width, annotation_height)
+    
+    check_overlap(boxes_area)
     if (task_error_flag == True):
         errors_list.append({
             'task_id': task['task_id'],
@@ -114,4 +165,6 @@ for task in JSON_load['docs']:
         task_warning_flag = False
 
 with open('output.json', 'w') as outfile:
-    json.dump({'warnings_detected': warnings_list, 'errors_detected': errors_list, 'total_warnings': len(warnings_list),'total_errors': total_errors}, outfile)
+    json.dump({'warnings_detected': warnings_list, 'errors_detected': errors_list, 'total_warnings': total_warnings,'total_errors': total_errors}, outfile)
+
+print("JSON file ( output.json ) has been successfully created") 

@@ -4,12 +4,17 @@
             "task_id": "5f127f699740b80017f9b170",
             "warning_information": [
                 {
+                    "uuid": "89e6b03e-1e6c-4ca3-9bc5-2660c1ddd768",
+                    "label": "information_sign",
+                    "warning_message": "Warning, uuid: 89e6b03e-1e6c-4ca3-9bc5-2660c1ddd768 , information_sign AND uuid: df8c17ab-5055-480f-a75b-70561997b60b , information_sign overlap by more than 75%"
+                },
+                {
                     "uuid": "0bc2ab2c-16b0-461e-8866-08f3bdc87238",
                     "label": "traffic_control_sign",
                     "warning_message": "Warning, this box probably has an truncation of 75 percent or more, verify that it is correct."
                 }
             ],
-            "task_warning_counter": 1
+            "task_warning_counter": 2
         },
         {
             "task_id": "5f127f671ab28b001762c204",
@@ -18,9 +23,14 @@
                     "uuid": "af326982-eaf5-44c1-92dd-13b6ab715c4d",
                     "label": "non_visible_face",
                     "warning_message": "Warning, this box probably has an occlusion of 75 percent or more, verify that it is correct."
+                },
+                {
+                    "uuid": "b80eb8aa-4d3d-4a8c-b581-3f4eb6c018e3",
+                    "label": "information_sign",
+                    "warning_message": "Warning, uuid: b80eb8aa-4d3d-4a8c-b581-3f4eb6c018e3 , information_sign AND uuid: 0d5d4005-3d0e-435e-84f1-83cfae9aaeed , information_sign overlap by more than 75%"
                 }
             ],
-            "task_warning_counter": 1
+            "task_warning_counter": 2
         },
         {
             "task_id": "5f127f5f3a6b100017232099",
@@ -62,6 +72,6 @@
             "task_error_counter": 4
         }
     ],
-    "total_warnings": 3,
+    "total_warnings": 5,
     "total_errors": 4
 }

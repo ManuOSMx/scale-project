@@ -24,13 +24,19 @@ The original URL is *https://api.scale.com/v1/tasks*, but the project in which w
 **API_URL = "https://api.scale.com/v1/tasks?project=Traffic%20Sign%20Detection&status=completed"**
 
 ---
+###  Programmatic Quality Checks
 
+In the *"Traffic Sign Spec Document"*, it mentions several rules and possible errors. One of them mentions that the **background color** of **traffic lights** should be *"other"*, and *"non_visible_face"* should use *"not_applicable"*.
+
+---
+
+The validation that I tried to perform was to check if a traffic signal had more than one of the same label and if the label was too large. To do this, I reviewed Scale's documentation to understand how label positions work, and calculated the perimeter and area of each label. I compared the average size of the labels and used it to check if it was too large in the image.
 
 ![Box position idea 1](./img/box_position.png)
 
 ### Spected JSON
 
-Here is the example of the expected JSON file structure
+Here is the example of the expected JSON file structure.
 
 ```JSON
 {

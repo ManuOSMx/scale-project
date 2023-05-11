@@ -79,7 +79,7 @@ def check_label_bg_color(label_id,label_name, label_color):
 
 def save_box(box_id, box_label, box_x, box_y, box_w, box_h):
     if(annotation_label != object_to_annotate_name_2):
-        
+        box_perimeter = (2 * box_w) + (2 * box_h)
         boxes_area.append(
             {
                 "box_id": box_id,
@@ -87,7 +87,8 @@ def save_box(box_id, box_label, box_x, box_y, box_w, box_h):
                 "position_left":  box_x,
                 "position_top":  box_y,
                 "width": box_w,
-                "height": box_h
+                "height": box_h,
+                "size": box_perimeter
             })
     return True
 
@@ -101,6 +102,7 @@ def calculate_overlap_area(box1, box2):
 
 
 def check_overlap(boxes_area):
+    check_oversize(boxes_area)
     for i in range(len(boxes_area)):
         for j in range(i+1, len(boxes_area)):
             # Box 1 and Box 2 areas
@@ -120,8 +122,33 @@ def check_overlap(boxes_area):
                 return True
     
     return False
-    
+
+def box_perimeter(sqr_w, sqr_h,sqr_id,sqr_label):
+    box_width = sqr_w
+    box_height = sqr_h
+    box_perimeter_result = (2 * box_width) + (2 * box_height)
+    box_info = {'box_id' : sqr_id, 'box_label': sqr_label ,'size' : box_perimeter_result}
+    box_perimeters_list.append(box_info)
+
+def sum_perimeters(sqr_list):
+    total = 0
+    for sqr_size in sqr_list:
+        total += sqr_size['size']
+    return total
+
+def check_oversize(box_list):
+    factor = 4
+    perimeter_average = sum_perimeters(box_list) / len(box_list)
+    max_size = perimeter_average * factor
+    for box in box_list:
+        if box['size'] > max_size:
+            warning_message = (f"The uuid: {(box['box_id'])} has an area that is too large compared to the average of all the areas. Please, verify if this is correct.")
+            add_warning(box['box_id'], box['box_label'], warning_message)
+            return True
+    return False
+            
 for task in JSON_load['docs']:
+    box_perimeters_list = []
     boxes_area = []
     task_error_flag, task_warning_flag = False, False
     task_annotations = task['response']['annotations']
@@ -139,11 +166,14 @@ for task in JSON_load['docs']:
         
         check_label_bg_color(annotation_id, annotation_label, annotation_bg_color)
         check_occlusion_truncation(annotation_id, annotation_label, annotation_occlusion, annotation_truncation)
-        task_error_flag =  True if errors_list_task else False
-        task_warning_flag =  True if warnings_list_task else False
         save_box(annotation_id, annotation_label, annotation_position_x, annotation_position_y, annotation_width, annotation_height)
-    
+        box_perimeter(annotation['width'],annotation['height'], annotation['uuid'], annotation['label'])
+        task_error_flag =  True if errors_list_task else False
+        task_warning_flag =  True if warnings_list_task  else False
+
     check_overlap(boxes_area)
+    check_oversize(box_perimeters_list)
+
     if (task_error_flag == True):
         errors_list.append({
             'task_id': task['task_id'],

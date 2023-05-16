@@ -1,20 +1,26 @@
 {
     "warnings_detected": [
         {
-            "task_id": "5f127f699740b80017f9b170",
+            "task_id": "5f127f6f26831d0010e985e5",
             "warning_information": [
                 {
                     "uuid": "89e6b03e-1e6c-4ca3-9bc5-2660c1ddd768",
                     "label": "information_sign",
                     "warning_message": "Warning, uuid: 89e6b03e-1e6c-4ca3-9bc5-2660c1ddd768 , information_sign AND uuid: df8c17ab-5055-480f-a75b-70561997b60b , information_sign overlap by more than 75%"
-                },
+                }
+            ],
+            "task_warning_counter": 1
+        },
+        {
+            "task_id": "5f127f6c3a6b1000172320ad",
+            "warning_information": [
                 {
                     "uuid": "0bc2ab2c-16b0-461e-8866-08f3bdc87238",
                     "label": "traffic_control_sign",
                     "warning_message": "Warning, this box probably has an truncation of 75 percent or more, verify that it is correct."
                 }
             ],
-            "task_warning_counter": 2
+            "task_warning_counter": 1
         },
         {
             "task_id": "5f127f671ab28b001762c204",
@@ -47,6 +53,17 @@
                 }
             ],
             "task_warning_counter": 2
+        },
+        {
+            "task_id": "5f127f55fdc4150010e37244",
+            "warning_information": [
+                {
+                    "uuid": "ba0d00b6-cd39-42bd-b977-a8a15cc474de",
+                    "label": "information_sign",
+                    "warning_message": "The uuid: ba0d00b6-cd39-42bd-b977-a8a15cc474de has an area that is too large compared to the average of all the areas. Please, verify if this is correct."
+                }
+            ],
+            "task_warning_counter": 1
         }
     ],
     "errors_detected": [
@@ -77,6 +94,6 @@
             "task_error_counter": 4
         }
     ],
-    "total_warnings": 6,
+    "total_warnings": 7,
     "total_errors": 4
 }

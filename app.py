@@ -168,11 +168,11 @@ for task in JSON_load['docs']:
         check_occlusion_truncation(annotation_id, annotation_label, annotation_occlusion, annotation_truncation)
         save_box(annotation_id, annotation_label, annotation_position_x, annotation_position_y, annotation_width, annotation_height)
         box_perimeter(annotation['width'],annotation['height'], annotation['uuid'], annotation['label'])
-        task_error_flag =  True if errors_list_task else False
-        task_warning_flag =  True if warnings_list_task  else False
 
     check_overlap(boxes_area)
     check_oversize(box_perimeters_list)
+    task_error_flag =  True if errors_list_task else False
+    task_warning_flag =  True if warnings_list_task  else False
 
     if (task_error_flag == True):
         errors_list.append({
@@ -184,7 +184,7 @@ for task in JSON_load['docs']:
         errors_list_task = []
         task_error_flag = False
 
-    elif (task_warning_flag == True):
+    if (task_warning_flag == True):
         warnings_list.append({
             'task_id': task['task_id'],
             'warning_information': warnings_list_task,
